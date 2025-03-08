@@ -1,0 +1,32 @@
+﻿name: nerdyweirdwords
+
+networks:
+  nerdyweirdwords:
+    driver: bridge
+
+services:
+
+  database:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: nerdyweirdwords
+    networks:
+      - nerdyweirdwords
+    ports:
+      - "3306:3306"
+    volumes:
+      - database:/var/lib/mysql
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  backend:
+    build:
+      context: .
+    networks:
+      - nerdyweirdwords
+    ports:
+      - "80:80"
+      - "443:443"
+
+volumes:
+  database:
+
