@@ -1,4 +1,6 @@
-namespace com.nerdyweirdwords.backend.Entity;
+#nullable disable
+
+namespace com.nerdyweirdwords.backend.PersonDomain;
 
 public class Person
 {

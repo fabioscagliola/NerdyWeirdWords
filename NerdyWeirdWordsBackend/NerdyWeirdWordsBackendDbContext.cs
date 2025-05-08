@@ -1,4 +1,4 @@
-using com.nerdyweirdwords.backend.Entity;
+using com.nerdyweirdwords.backend.PersonDomain;
 using Microsoft.EntityFrameworkCore;
 
 namespace com.nerdyweirdwords.backend;
