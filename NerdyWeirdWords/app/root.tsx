@@ -38,14 +38,23 @@ export const links: Route.LinksFunction = () => [
     },
 ];
 
+export function meta({}: Route.MetaArgs) {
+    return [
+        {name: "author", content: "Fabio Scagliola"},
+        {name: "description", content: "A web app for writers to share their work with beta readers, gather feedback, and engage with them."},
+        {name: "keywords", content: ""},
+        {title: "/nerdy|weird|words/"},
+    ];
+}
+
 export function Layout({children}: { children: React.ReactNode }) {
     return (
         <html lang="en">
         <head>
-            <Links/>
             <meta charSet="utf-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <Meta/>
+            <Links/>
         </head>
         <body>
         {children}
