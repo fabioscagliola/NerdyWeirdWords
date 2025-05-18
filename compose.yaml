@@ -7,7 +7,7 @@ networks:
 services:
 
   database:
-    image: mariadb:11
+    image: mariadb:latest
     environment:
       MARIADB_ROOT_PASSWORD: nerdyweirdwords
     networks:
@@ -24,8 +24,7 @@ services:
     networks:
       - nerdyweirdwords
     ports:
-      - "80:80"
-      - "443:443"
+      - "65535:8080"
 
 volumes:
   database:
