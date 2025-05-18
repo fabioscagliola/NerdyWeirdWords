@@ -27,6 +27,7 @@ public class Program
         webApplication.UseHttpsRedirection();
         webApplication.UseAuthorization();
         webApplication.MapControllers();
+        webApplication.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin());
         webApplication.Run();
     }
 }
