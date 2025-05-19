@@ -3,3 +3,13 @@
 GET {{host}}/status
 
 ###
+
+POST {{host}}/Person/SendSignInLink
+Content-Type: application/json
+
+{
+  "email": "fabio@nerdyweirdwords.com"
+}
+
+###
+
