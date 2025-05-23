@@ -4,7 +4,7 @@ A web app for writers to share their work with beta readers, gather feedback, an
 
 ## Logo
 
-![android-chrome-192x192.png](NerdyWeirdWords/android-chrome-192x192.png)
+![android-chrome-192x192.png](NerdyWeirdWords/public/android-chrome-192x192.png)
 
 ## Slogan
 
