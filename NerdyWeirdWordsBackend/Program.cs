@@ -58,6 +58,8 @@ public class Program
 
         webApplication.UseCors(configurePolicy =>
         {
+            configurePolicy.AllowAnyHeader();
+            configurePolicy.AllowAnyMethod();
             configurePolicy.AllowAnyOrigin();
         });
 

@@ -22,7 +22,7 @@ public class PersonController(IOptions<NerdyWeirdConfig> config, NerdyWeirdDatab
 
         if (person == null)
         {
-            return BadRequest("A person with this email doesn't exist in our database.");
+            return BadRequest("A person with this email doesn't exist in our database!");
         }
 
         // TODO: Send link via email
