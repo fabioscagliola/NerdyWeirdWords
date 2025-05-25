@@ -37,6 +37,13 @@ services:
     ports:
       - "65534:3000"
 
+  nginx:
+    image: my-websites-dock:latest
+    networks:
+      - nerdyweirdwords
+    ports:
+      - "443:443"
+
 volumes:
   database:
 

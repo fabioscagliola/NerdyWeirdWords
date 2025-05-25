@@ -1,5 +1,5 @@
 up:
-	docker compose -p nerdyweirdwords up -d --build --pull always
+	docker compose -p nerdyweirdwords up -d --build
 
 down:
 	docker compose -p nerdyweirdwords down --remove-orphans
