@@ -18,4 +18,5 @@ RUN dotnet publish "NerdyWeirdWordsBackend.csproj" -c $BUILD_CONFIGURATION -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY cert.pem .
 ENTRYPOINT ["dotnet", "NerdyWeirdWordsBackend.dll"]
