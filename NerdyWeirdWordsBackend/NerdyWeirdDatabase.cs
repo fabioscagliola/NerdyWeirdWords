@@ -1,11 +1,11 @@
-using com.nerdyweirdwords.backend.Entity;
+using com.nerdyweirdwords.backend.PersonDomain;
 using Microsoft.EntityFrameworkCore;
 
 namespace com.nerdyweirdwords.backend;
 
-public sealed class NerdyWeirdWordsBackendDbContext : DbContext
+public sealed class NerdyWeirdDatabase : DbContext
 {
-    public NerdyWeirdWordsBackendDbContext(DbContextOptions<NerdyWeirdWordsBackendDbContext> options) : base(options)
+    public NerdyWeirdDatabase(DbContextOptions<NerdyWeirdDatabase> options) : base(options)
     {
         Database.EnsureCreated();
     }

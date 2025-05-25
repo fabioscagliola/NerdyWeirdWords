@@ -4,7 +4,7 @@ A web app for writers to share their work with beta readers, gather feedback, an
 
 ## Logo
 
-![android-chrome-192x192.png](NerdyWeirdWords/android-chrome-192x192.png)
+![android-chrome-192x192.png](NerdyWeirdWords/public/android-chrome-192x192.png)
 
 ## Slogan
 
@@ -22,11 +22,9 @@ into·written·words|
 
 ### Version 1
 
-1. People sign up
 1. People sign in
-1. People edit their profiles
 1. People upload writings
-1. People invite people to beta read their writings → they may have never signed up before
+1. People invite people to beta read their writings → they have never signed up before
 1. People accept invitations
 1. People read writings
 1. People comment on writings
@@ -37,6 +35,8 @@ into·written·words|
 
 ### Version 2
 
+1. People sign up
+1. People edit their profiles
 1. People comment on selected text
 1. Writers may mark their writings as public → writers provide Kickstarter-like introductory material
 1. People browse and search for public writings

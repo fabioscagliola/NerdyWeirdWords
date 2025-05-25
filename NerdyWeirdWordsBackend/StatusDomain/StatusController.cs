@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace com.nerdyweirdwords.backend.Controller;
+namespace com.nerdyweirdwords.backend.StatusDomain;
 
 [ApiController]
 [Route("[controller]")]

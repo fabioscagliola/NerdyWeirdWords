@@ -1,5 +1,0 @@
-@host = http://localhost:65535
-
-GET {{host}}/status
-
-###

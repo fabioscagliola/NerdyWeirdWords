@@ -1,0 +1,21 @@
+@host = http://localhost:65535
+@bearer = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjEifQ.eyJlbWFpbCI6ImZhYmlvQG5lcmR5d2VpcmR3b3Jkcy5jb20iLCJmYW1pbHlfbmFtZSI6IkZhYmlvIiwiZ2l2ZW5fbmFtZSI6IlNjYWdsaW9sYSIsImlhdCI6IjE3NDgwMDgzNzkiLCJpc3MiOiJodHRwczovL25lcmR5d2VpcmR3b3Jkcy5jb20iLCJzdWIiOiIxYzZlYTJhMC0zYjcwLTRiMDEtYmMyNy05N2M0NTI5NGQzZjIifQ.UQ9aUOTwDpN54oG9ls0EexJ_tO-C8mmpPg-dDnqgbwIUl0Wyfm1Bfa6b0zi4V0_PnksGUff4D2EbOi89ilj-fLqtnLJGffcIbG6HNbjw2vLKA-7q4R_rog_ITDPl5prT_j4-RmxpAmjEsvR_sU9NNcke3RloHAh31UUcnJYt41HCDggrUtFojHKzy6fAkF_p5SjbbucNN3CAagV3IL955A-4V4EYKK1uFr8V7ZPP4Wuyis_ufz24ZDV7iwpkng58w8ckBjbtFip9C8ZNCCEWkWLz-SHM6bSuIWnHFDoizE78Xb1EbrIx6CORo5abVXuo-1iXwUUwEUtjJamcFr_kng
+
+GET {{host}}/status
+
+###
+
+POST {{host}}/Person/SendSignInLink
+Content-Type: application/json
+
+{
+  "email": "fabio@nerdyweirdwords.com"
+}
+
+###
+
+GET {{host}}/Person/IsAuthorized
+Authorization: Bearer {{bearer}}
+
+###
+

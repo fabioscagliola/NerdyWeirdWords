@@ -7,7 +7,8 @@ networks:
 services:
 
   database:
-    image: mariadb:11
+    container_name: nerdy-weird-database
+    image: mariadb:latest
     environment:
       MARIADB_ROOT_PASSWORD: nerdyweirdwords
     networks:
@@ -20,12 +21,21 @@ services:
 
   backend:
     build:
-      context: .
+      context: ./NerdyWeirdWordsBackend
+    container_name: nerdy-weird-backend
     networks:
       - nerdyweirdwords
     ports:
-      - "80:80"
-      - "443:443"
+      - "65535:8080"
+
+  frontend:
+    build:
+      context: ./NerdyWeirdWords
+    container_name: nerdy-weird-frontend
+    networks:
+      - nerdyweirdwords
+    ports:
+      - "65534:3000"
 
 volumes:
   database:

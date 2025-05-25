@@ -1,4 +1,6 @@
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace com.nerdyweirdwords.backend;
 
@@ -6,27 +8,61 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
+        var webApplicationBuilder = WebApplication.CreateBuilder(args);
+
+        var configurationSection = webApplicationBuilder.Configuration.GetSection(nameof(NerdyWeirdConfig));
+        webApplicationBuilder.Services.Configure<NerdyWeirdConfig>(configurationSection);
+        var config = configurationSection.Get<NerdyWeirdConfig>()!;
 
         webApplicationBuilder.Services.AddControllers();
         webApplicationBuilder.Services.AddOpenApi();
-        webApplicationBuilder.Services.AddDbContext<NerdyWeirdWordsBackendDbContext>(dbContextOptionsBuilder =>
+
+        var rsa = RSA.Create();
+        rsa.ImportFromPem(System.IO.File.ReadAllText("cert.pem").ToCharArray());
+
+        webApplicationBuilder.Services.AddAuthentication().AddJwtBearer(opts =>
         {
-            string? connectionString = webApplicationBuilder.Configuration.GetConnectionString("ConnectionString");
-            MySqlServerVersion mySqlServerVersion = new (new Version(11, 0, 0));
-            dbContextOptionsBuilder.UseMySql(connectionString, mySqlServerVersion);
+            opts.TokenValidationParameters = new TokenValidationParameters
+            {
+                IssuerSigningKey = new RsaSecurityKey(rsa),
+                ValidIssuer = config.Issuer,
+                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = false,
+            };
         });
 
-        WebApplication webApplication = webApplicationBuilder.Build();
+        webApplicationBuilder.Services.AddDbContext<NerdyWeirdDatabase>(opts =>
+        {
+            var connectionString = webApplicationBuilder.Configuration.GetConnectionString("ConnectionString"); // TODO: Move the connection string to the config object
+            var mySqlServerVersion = new MySqlServerVersion(new Version(11, 0, 0));
+            opts.UseMySql(connectionString, mySqlServerVersion);
+        });
+
+        webApplicationBuilder.WebHost.UseSentry(opts =>
+        {
+            opts.Dsn = config.SentryDataSourceName;
+        });
+
+        var webApplication = webApplicationBuilder.Build();
 
         if (webApplication.Environment.IsDevelopment())
         {
             webApplication.MapOpenApi();
         }
 
+        webApplication.UseCors(configurePolicy =>
+        {
+            configurePolicy.AllowAnyHeader();
+            configurePolicy.AllowAnyMethod();
+            configurePolicy.AllowAnyOrigin();
+        });
+
         webApplication.UseHttpsRedirection();
         webApplication.UseAuthorization();
         webApplication.MapControllers();
+
         webApplication.Run();
     }
 }
