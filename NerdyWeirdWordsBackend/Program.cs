@@ -52,16 +52,16 @@ public class Program
             webApplication.MapOpenApi();
         }
 
-        webApplication.UseHttpsRedirection();
-        webApplication.UseAuthorization();
-        webApplication.MapControllers();
-
         webApplication.UseCors(configurePolicy =>
         {
             configurePolicy.AllowAnyHeader();
             configurePolicy.AllowAnyMethod();
             configurePolicy.AllowAnyOrigin();
         });
+
+        webApplication.UseHttpsRedirection();
+        webApplication.UseAuthorization();
+        webApplication.MapControllers();
 
         webApplication.Run();
     }

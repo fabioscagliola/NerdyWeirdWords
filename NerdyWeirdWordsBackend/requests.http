@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ###
 
-GET {{host}}/Person/Authorized
+GET {{host}}/Person/IsAuthorized
 Authorization: Bearer {{bearer}}
 
 ###

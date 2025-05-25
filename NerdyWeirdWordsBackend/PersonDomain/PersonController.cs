@@ -31,7 +31,7 @@ public class PersonController(IOptions<NerdyWeirdConfig> config, NerdyWeirdDatab
     }
 
     [Authorize]
-    public IActionResult Authorized()
+    public IActionResult IsAuthorized()
     {
         return Ok();
     }

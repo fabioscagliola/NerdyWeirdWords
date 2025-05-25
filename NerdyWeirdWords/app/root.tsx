@@ -69,8 +69,6 @@ export default function App() {
     return <Outlet/>;
 }
 
-fetch("http://localhost:65535/status").then(response => response.text()).then(console.log);
-
 // TODO: Review from here on
 
 export function ErrorBoundary({error}: Route.ErrorBoundaryProps) {

@@ -6,6 +6,6 @@ import {
 
 export default [
     index("routes/home.tsx"),
-    route("signin", "user/signInForm.tsx"),
+    route("signin/:jsonWebToken?", "user/signIn.tsx"),
 ] satisfies RouteConfig;
 
