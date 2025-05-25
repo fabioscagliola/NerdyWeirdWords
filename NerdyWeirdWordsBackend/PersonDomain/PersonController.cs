@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace com.nerdyweirdwords.backend.PersonDomain;
 
@@ -25,9 +27,28 @@ public class PersonController(IOptions<NerdyWeirdConfig> config, NerdyWeirdDatab
             return BadRequest("A person with this email doesn't exist in our database!");
         }
 
-        // TODO: Send link via email
+        var href = $"https://nerdyweirdwords.com/signin/{GetJwt(person)}";
 
-        return Ok(GetJwt(person));
+        try
+        {
+            var sendGridClient = new SendGridClient(config.Value.TwilioSendGridApiKey);
+            var from = new EmailAddress("fabio@nerdyweirdwords.com", "Fabio Scagliola");
+            var to = new EmailAddress(incoming.Email, $"{person.FName} {person.LName}");
+            var subject = "/nerdy|weird|words/";
+            var htmlTextContent = $"""
+                                   <p>Hello, {person.FName}!</p>
+                                   <p>Step into the place where <a href="{href}">nerdy</a> thoughts shape <a href="{href}">weird</a> stories into written <a href="{href}">words</a>&hellip;</p>
+                                   <p>Cheers,<br/>Fabio</p>
+                                   """;
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlTextContent);
+            await sendGridClient.SendEmailAsync(msg);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, "Something went wrong while attempting to send the link via email!");
+        }
+
+        return Ok();
     }
 
     [Authorize]
