@@ -24,7 +24,6 @@ export default function SignIn() {
                 ?.split("=")[1];
             if (jsonWebToken) {
                 console.log("JWT found in cookie.");
-                console.log(jsonWebToken);
                 if (await isAuthorized(jsonWebToken)) {
                     console.log("Valid JWT found in cookie.");
                     navigate(target);
