@@ -37,8 +37,10 @@ services:
     ports:
       - "65534:3000"
 
-  nginx:
-    image: my-websites-dock:latest
+  webserver:
+    build:
+      context: ./nginx
+    container_name: nerdy-weird-webserver
     networks:
       - nerdyweirdwords
     ports:
