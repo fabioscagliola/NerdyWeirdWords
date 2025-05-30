@@ -1,5 +1,3 @@
-
-
 Generate a self-signed certificate using the following command.
 
 ```

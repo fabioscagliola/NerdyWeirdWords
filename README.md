@@ -1,28 +1,24 @@
-# /nerdy|weird|words/
-
-A web app for writers to share their work with beta readers, gather feedback, and engage with them.
-
-## Logo
-
 ![android-chrome-192x192.png](NerdyWeirdWords/public/android-chrome-192x192.png)
 
-## Slogan
+# /nerdy|weird|words/
 
-*Nerdy thoughts shape weird stories into written words.*
+A place where writers share their work with beta readers, gather feedback, and engage with them.
 
-Stylized as follows:
+Still in development. Open source. Here you can find the code and roadmap.
 
-```
-nerdy·thoughts↵
-shape·weird·stories↵
-into·written·words|
-```
+The name, the slogan, and their stylization are inspired by regular expressions, a tool software developers use to match patterns in text. I was playing with a pattern that could match both *weird* and *words*, and, being the nerd I am, I threw that into the mix too.
 
-## Features roadmap
+The logo represents two brain halves—the right one flipped upside down—both resembling clouds, because this space thrives on imagination and lives in the cloud.
+
+I created this because I’m about to finish my first novella, and I want to share it with beta readers in a meaningful, interactive way. And no existing platform felt quite right.
+
+## Roadmap
+
+Currently working on version 1.2 – people upload writings
 
 ### Version 1
 
-1. People sign in
+1. ~~People sign in~~
 1. People upload writings
 1. People invite people to beta read their writings → they have never signed up before
 1. People accept invitations
@@ -30,8 +26,8 @@ into·written·words|
 1. People comment on writings
 1. People comment on paragraphs
 1. Writers may enable public comments → they become visible to all the invited readers
-1. If the writer enabled public comments, readers may mark their comments as private (visible to the writer only) or public (visible to all the invited readers)
-1. Writers and readers engage in threads of comments including reactions
+1. If writers enabled public comments, readers may mark their comments as private (visible to the writer only) or public (visible to all the invited readers)
+1. Writers and readers engage in threads of comments
 
 ### Version 2
 

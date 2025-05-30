@@ -1,11 +1,6 @@
-import {
-    useEffect,
-    useState,
-} from "react";
-import {
-    useNavigate,
-    useParams,
-} from "react-router";
+import {useEffect, useState,} from "react";
+import {useNavigate, useParams,} from "react-router";
+import {isAuthorized} from "~/util";
 
 export default function SignIn() {
     const [errorMessage, setErrorMessage] = useState<null | string>(null);
@@ -17,7 +12,7 @@ export default function SignIn() {
     useEffect(() => {
         (async () => {
             const cookieName = "jsonWebToken";
-            const target = "/whatever";
+            const target = "/main";
             const jsonWebToken = document.cookie
                 .split("; ")
                 .find(item => item.startsWith(`${cookieName}=`))
@@ -49,15 +44,6 @@ export default function SignIn() {
             setHangOn(false);
         })();
     }, [navigate, params.jsonWebToken]);
-
-    const isAuthorized = async (jsonWebToken: string) => {
-        // TODO: Handle exceptions
-        const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/Person/IsAuthorized`, {
-            method: "GET",
-            headers: {"Authorization": `Bearer ${jsonWebToken}`},
-        });
-        return response.ok;
-    }
 
     async function submit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();

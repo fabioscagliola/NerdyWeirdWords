@@ -18,7 +18,7 @@ public class PersonController(IOptions<NerdyWeirdConfig> config, NerdyWeirdDatab
 {
     public async Task<IActionResult> SendSignInLink(SendSignInLinkIncoming incoming)
     {
-        // 1c6ea2a0-3b70-4b01-bc27-97c45294d3f2,fabio@nerdyweirdwords.com,Fabio,Scagliola
+        // insert into Person values ('1c6ea2a0-3b70-4b01-bc27-97c45294d3f2', 'fabio@nerdyweirdwords.com', 'Fabio', 'Scagliola');
 
         var person = await database.People.FirstOrDefaultAsync(x => x.Email == incoming.Email);
 
