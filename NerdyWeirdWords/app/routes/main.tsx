@@ -8,7 +8,7 @@ export default function Main() {
     useEffect(() => {
         (async () => {
             const cookieName = "jsonWebToken";
-            const target = "/main";
+            const target = "/signin";
             const jsonWebToken = document.cookie
                 .split("; ")
                 .find(item => item.startsWith(`${cookieName}=`))
@@ -21,10 +21,12 @@ export default function Main() {
                     console.log("Invalid JWT found in cookie.");
                     document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
                     navigate(target);
+                    return;
                 }
             } else {
                 console.log("JWT not found.");
                 navigate(target);
+                return;
             }
         })();
     }, [navigate]);
