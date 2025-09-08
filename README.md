@@ -46,3 +46,4 @@ Currently working on version 1.2 – people upload writings
 1. People report comments, people, writings
 1. Admins ban people
 
+2
