@@ -30,7 +30,7 @@ function UploadCheck() {
     }
 
     if (!file) {
-      setErrorMessage("Devi selezionare un file .md!");
+      setErrorMessage("You must select a .md! file");
       setAlertVariant("warning");
       return;
     }
