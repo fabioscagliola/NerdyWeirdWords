@@ -46,3 +46,22 @@ Currently working on version 1.2 – people upload writings
 1. People report comments, people, writings
 1. Admins ban people
 
+## Setup
+
+Take the following steps before you `make up` a local development environment.
+
+Generate a self-signed certificate using the following command. This will be used by the backend to sign tokens.
+
+```
+openssl genpkey -algorithm RSA -out cert.pem -pkeyopt rsa_keygen_bits:2048
+```
+
+Insert the first user into the database using the following command. Replace my email and name with your own.
+
+```
+docker exec nerdy-weird-database \
+  mariadb -h 127.0.0.1 -u nerdyweirdwords -pnerdyweirdwords nerdyweirdwords \
+  -e "insert into Person values ('1c6ea2a0-3b70-4b01-bc27-97c45294d3f2', 'fabio@nerdyweirdwords.com', 'Fabio', 'Scagliola');"
+```
+
+TwilioSendGridApiKey
