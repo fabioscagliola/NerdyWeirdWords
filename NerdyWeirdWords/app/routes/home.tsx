@@ -32,11 +32,6 @@ export default function Home() {
                 </p>
             </div>
             <div className="my-5 text-center">
-                <a className="btn btn-primary" href="/upload-writing">
-                    Upload writing
-                </a>
-            </div>
-            <div className="my-5 text-center">
                 <p>A place where writers share their work with beta readers, gather feedback, and engage with them.</p>
                 <p>Still in development. Open source. <a href="https://github.com/fabioscagliola/NerdyWeirdWords" target="_blank">Here</a> you can find the code and roadmap.</p>
                 <p>The name, the slogan, and their stylization are inspired by regular expressions, a tool software developers use to match patterns in text. I was playing with a pattern that could match both <i>weird</i> and <i>words</i>, and, being the nerd I am, I threw that into the mix too.</p>

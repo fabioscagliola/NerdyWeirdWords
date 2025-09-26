@@ -18,7 +18,6 @@ export default function UploadWriting() {
             className="form-control"
             id="title"
             name="title"
-            required
           />
         </div>
 
@@ -38,7 +37,6 @@ export default function UploadWriting() {
             className="form-control"
             id="content"
             name="content"
-            required
           />
         </div>
 

@@ -31,6 +31,10 @@ export default function Main() {
         })();
     }, [navigate]);
 
-    return <h1>Main</h1>;
+    return (
+    <main className="container">
+        <h1>Main</h1>
+        <a className="btn btn-light" href="/upload-writing">Upload Writing</a>
+    </main> );
 }
 
