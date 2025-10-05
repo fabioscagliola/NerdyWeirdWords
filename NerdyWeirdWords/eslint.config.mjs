@@ -37,6 +37,8 @@ export default [
         { argsIgnorePattern: "^_" },
       ],
       "react/react-in-jsx-scope": "off",
+      "react/jsx-max-props-per-line": ["error", { "maximum": 99, "when": "always" }],
+      "react/jsx-first-prop-new-line": ["error", "never"]
     },
     ignores: [
       "node_modules",
