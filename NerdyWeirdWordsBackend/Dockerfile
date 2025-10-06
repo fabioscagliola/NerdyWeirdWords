@@ -1,4 +1,13 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS development
+ARG BUILD_CONFIGURATION=Development
+EXPOSE 65535
+WORKDIR /src
+COPY NerdyWeirdWordsBackend.csproj .
+RUN dotnet restore "NerdyWeirdWordsBackend.csproj"
+COPY . .
+CMD dotnet run
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
