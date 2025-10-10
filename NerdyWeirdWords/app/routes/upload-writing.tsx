@@ -1,90 +1,55 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Alert from 'react-bootstrap/Alert';
-
+import {validateForm} from "~/util";
 
 interface FormDataPreview {
   title: string;
   description: string;
-  file: File | null;
+  writing: File;
 }
 
+const ALLOWED_EXTENSIONS = [".md"];
+
 function UploadCheck() {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [file, setFile] = useState<File | null>(null);
-  const [formData, setFormData] = useState<FormDataPreview | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [alertVariant, setAlertVariant] = useState<string>("danger");
+    const [formData, setFormData] = useState<FormDataPreview | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+      event.preventDefault();
+      
+      const form = event.currentTarget.form;
+      if (!form) {
+          setErrorMessage("Form not found");
+          return;
+      }
+      
+      try {
+          setErrorMessage(null);
+          setSuccessMessage("Upload in progress…");
 
-    setErrorMessage("Upload in Progress"); // Informs the user that the upload is in progress
-    // Validation
-
-    if (!title.trim()) {
-      setErrorMessage("You must indicate a title!");
-      setAlertVariant("warning");
-      return;
-    }
-
-    if (!file) {
-      setErrorMessage("You must select a .md! file");
-      setAlertVariant("warning");
-      return;
-    }
-
-    if (!file.name.endsWith(".md")) {
-      setErrorMessage("The file must be .md");
-      setAlertVariant("warning");
-      return;
-    }
-    // everithing works → save data
-
-    const data: FormDataPreview = { title, description, file };
-    setFormData(data);
-    console.log("Form data:", data);
-    
-    setErrorMessage("File accepted for upload!");
-    setAlertVariant("success");
+          const data = new FormData(form);
+          const title = data.get("title")?.toString() ?? "";
+          const description = data.get("description")?.toString() ?? "";
+          const writing = data.get("content");
+          
+          validateForm(title, writing, ALLOWED_EXTENSIONS);
+          
+          setFormData({ title: title.trim(), description, writing: writing as File });
+          setSuccessMessage("File accepted for upload!");
+      } catch (err: unknown) {
+          if (err instanceof Error) {
+              setErrorMessage(err.message);
+          } else {
+              setErrorMessage("Something went wrong!");
+          }
+      }
   };
-
+  
   return (
     <>
-      <form method="post">
-        <h1>Upload your book</h1>
-
-        <input
-          type="text"
-          maxLength={30}
-          placeholder="Book title"
-          required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <textarea
-          placeholder="Description"
-          maxLength={100}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
-
-        <input
-          data-testid="file"
-          type="file"
-          onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
-        />
-
-        <button onClick={handleClick}>Upload</button>
-      </form>
-
-             {errorMessage && (
-          <Alert variant={alertVariant} dismissible onClose={() => setErrorMessage(null)}>
-            {errorMessage}
-          </Alert>
-        )}
+        {errorMessage && <div className="alert alert-warning">{errorMessage}</div>}
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
     </>
   );
 }
