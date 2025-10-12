@@ -1,0 +1,52 @@
+﻿name: nerdyweirdwords
+
+networks:
+  nerdyweirdwords:
+    driver: bridge
+
+services:
+
+  database:
+    container_name: nerdy-weird-database
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: nerdyweirdwords
+    networks:
+      - nerdyweirdwords
+    ports:
+      - "3306:3306"
+    volumes:
+      - database:/var/lib/mysql
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  backend:
+    build:
+      context: ./NerdyWeirdWordsBackend
+      target: development
+    container_name: nerdy-weird-backend
+    develop:
+      watch:
+        - action: rebuild
+          path: ./NerdyWeirdWordsBackend
+    networks:
+      - nerdyweirdwords
+    ports:
+      - "65535:65535"
+
+  frontend:
+    build:
+      context: ./NerdyWeirdWords
+      target: development
+    container_name: nerdy-weird-frontend
+    develop:
+      watch:
+        - action: rebuild
+          path: ./NerdyWeirdWords
+    networks:
+      - nerdyweirdwords
+    ports:
+      - "65534:65534"
+
+volumes:
+  database:
+

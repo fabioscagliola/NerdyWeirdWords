@@ -7,3 +7,6 @@ down:
 down-vols:
 	docker compose -p nerdyweirdwords down --remove-orphans --volumes
 
+watch:
+	docker compose -f compose-development.yaml -p nerdyweirdwords watch
+
