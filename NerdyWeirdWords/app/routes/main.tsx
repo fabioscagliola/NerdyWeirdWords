@@ -32,9 +32,12 @@ export default function Main() {
     }, [navigate]);
 
     return (
-    <main className="container">
-        <h1>Main</h1>
-        <a className="btn btn-light" href="/upload-writing">Upload Writing</a>
-    </main> );
+        <main className="container">
+            <div className="my-5 text-center">
+                <h1>Main</h1>
+                <a className="btn btn-light" href="/upload-writing">Upload writing</a>
+            </div>
+        </main>
+    );
 }
 
