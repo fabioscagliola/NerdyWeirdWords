@@ -27,24 +27,32 @@ public class PersonController(IOptions<NerdyWeirdConfig> config, NerdyWeirdDatab
             return BadRequest("A person with this email doesn't exist in our database!");
         }
 
-        var href = $"https://nerdyweirdwords.com/signin/{GetJwt(person)}";
+        var jsonWebToken = GetJwt(person);
+
+        Console.WriteLine($"http://localhost:65534/signin/{jsonWebToken}");
+
+        var href = $"https://nerdyweirdwords.com/signin/{jsonWebToken}";
 
         try
         {
-            var sendGridClient = new SendGridClient(config.Value.TwilioSendGridApiKey);
-            var from = new EmailAddress("fabio@nerdyweirdwords.com", "Fabio Scagliola");
-            var to = new EmailAddress(incoming.Email, $"{person.FName} {person.LName}");
-            var subject = "/nerdy|weird|words/";
-            var htmlTextContent = $"""
-                                   <p>Hello, {person.FName}!</p>
-                                   <p>Step into the place where <a href="{href}">nerdy</a> thoughts shape <a href="{href}">weird</a> stories into written <a href="{href}">words</a>&hellip;</p>
-                                   <p>Cheers,<br/>Fabio</p>
-                                   """;
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlTextContent);
-            await sendGridClient.SendEmailAsync(msg);
+            if (config.Value.TwilioSendGridApiKey != null)
+            {
+                var sendGridClient = new SendGridClient(config.Value.TwilioSendGridApiKey);
+                var from = new EmailAddress("fabio@nerdyweirdwords.com", "Fabio Scagliola");
+                var to = new EmailAddress(incoming.Email, $"{person.FName} {person.LName}");
+                var subject = "/nerdy|weird|words/";
+                var htmlTextContent = $"""
+                                       <p>Hello, {person.FName}!</p>
+                                       <p>Step into the place where <a href="{href}">nerdy</a> thoughts shape <a href="{href}">weird</a> stories into written <a href="{href}">words</a>&hellip;</p>
+                                       <p>Cheers,<br/>Fabio</p>
+                                       """;
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlTextContent);
+                await sendGridClient.SendEmailAsync(msg);
+            }
         }
         catch (Exception e)
         {
+            Console.Error.WriteLine(e);
             return StatusCode(500, "Something went wrong while attempting to send the link via email!");
         }
 

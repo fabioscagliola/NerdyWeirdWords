@@ -46,4 +46,41 @@ Currently working on version 1.2 – people upload writings
 1. People report comments, people, writings
 1. Admins ban people
 
-hello
+## Development environment setup
+
+Follow these steps to set up and run a development environment.
+
+Generate a certificate using the following command. This will be used by the backend to sign tokens.
+
+```
+openssl genpkey -algorithm RSA -out ./NerdyWeirdWordsBackend/cert.pem -pkeyopt rsa_keygen_bits:2048
+```
+
+Spin up all required containers: database, backend, and frontend.
+
+```
+make watch
+```
+
+Once the containers are running, verify the backend is responding. This command will also initialize the database.
+
+```
+curl http://localhost:65535/status
+```
+
+Insert the first user into the database. Replace my email and name with your own.
+
+```
+docker exec nerdy-weird-database \
+  mariadb -h 127.0.0.1 -u nerdyweirdwords -pnerdyweirdwords nerdyweirdwords \
+  -e "insert into Person values ('1c6ea2a0-3b70-4b01-bc27-97c45294d3f2', 'fabio@nerdyweirdwords.com', 'Fabio', 'Scagliola');"
+```
+
+Point your browser to http://localhost:65534
+
+In development, email delivery is disabled, so no link will be sent. Instead, it will be printed in the backend logs.
+
+```
+docker logs --follow nerdy-weird-backend
+```
+

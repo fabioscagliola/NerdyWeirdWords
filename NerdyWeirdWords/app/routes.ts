@@ -8,5 +8,6 @@ export default [
     index("routes/home.tsx"),
     route("main", "routes/main.tsx"),
     route("signin/:jsonWebToken?", "user/signIn.tsx"),
+    route("upload-writing", "routes/upload-writing.tsx"),
 ] satisfies RouteConfig;
 

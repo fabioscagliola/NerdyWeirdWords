@@ -1,57 +1,30 @@
-import React, { useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {validateForm} from "~/util";
+export default function UploadWriting() {
+    function handleClick(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+    }
 
-interface FormDataPreview {
-  title: string;
-  description: string;
-  writing: File;
+    return (
+        <main className="container">
+            <div className="my-5 text-center">
+                <h1>Upload writing</h1>
+                <p>Pick a file, give it a title, optionally a description, and upload your writing.</p>
+            </div>
+            <form className="col-10 col-lg-5 mx-auto my-5" encType="multipart/form-data" noValidate onSubmit={handleClick}>
+                <div className="mb-3">
+                    <label htmlFor="content" className="form-label">Writing</label>
+                    <input type="file" className="form-control" id="content" name="content"/>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="title" className="form-label">Title</label>
+                    <input type="text" className="form-control" id="title" name="title"/>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="description" className="form-label">Description</label>
+                    <textarea className="form-control" id="description" name="description"/>
+                </div>
+                <button type="submit" className="btn btn-primary">Upload</button>
+            </form>
+        </main>
+    );
 }
 
-const ALLOWED_EXTENSIONS = [".md"];
-
-function UploadCheck() {
-    const [formData, setFormData] = useState<FormDataPreview | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      
-      const form = event.currentTarget.form;
-      if (!form) {
-          setErrorMessage("Form not found");
-          return;
-      }
-      
-      try {
-          setErrorMessage(null);
-          setSuccessMessage("Upload in progress…");
-
-          const data = new FormData(form);
-          const title = data.get("title")?.toString() ?? "";
-          const description = data.get("description")?.toString() ?? "";
-          const writing = data.get("content");
-          
-          validateForm(title, writing, ALLOWED_EXTENSIONS);
-          
-          setFormData({ title: title.trim(), description, writing: writing as File });
-          setSuccessMessage("File accepted for upload!");
-      } catch (err: unknown) {
-          if (err instanceof Error) {
-              setErrorMessage(err.message);
-          } else {
-              setErrorMessage("Something went wrong!");
-          }
-      }
-  };
-  
-  return (
-    <>
-        {errorMessage && <div className="alert alert-warning">{errorMessage}</div>}
-        {successMessage && <div className="alert alert-success">{successMessage}</div>}
-    </>
-  );
-}
-
-export default UploadCheck;
