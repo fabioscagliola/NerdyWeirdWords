@@ -1,6 +1,30 @@
 export default function UploadWriting() {
     function handleClick(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const data = {
+            writing: formData.get("writing") as File,
+            title: formData.get("title")?.toString().trim(),
+            description: formData.get("description")?.toString().trim(),
+        }
+        validate(data);
+    }
+
+    function validate(data: { writing?: File; title?: string; description?: string }): void {
+        const allowedExtensions = ["md"];
+
+        if (!data.writing || data.writing?.size === 0) {
+            throw new Error("You must indicate a file!");
+        }
+
+        const extension = data.writing.name.substring(data.writing.name.lastIndexOf(".") + 1).toLowerCase();
+        if (!extension || !allowedExtensions.includes(extension)) {
+            throw new Error(`Invalid file type! Supported file types: ${allowedExtensions.join(", ")}`);
+        }
+
+        if (!data.title || !data.title.trim()) {
+            throw new Error("You must indicate a title!");
+        }
     }
 
     return (
@@ -11,8 +35,8 @@ export default function UploadWriting() {
             </div>
             <form className="col-10 col-lg-5 mx-auto my-5" encType="multipart/form-data" noValidate onSubmit={handleClick}>
                 <div className="mb-3">
-                    <label htmlFor="content" className="form-label">Writing</label>
-                    <input type="file" className="form-control" id="content" name="content"/>
+                    <label htmlFor="writing" className="form-label">Writing</label>
+                    <input type="file" className="form-control" id="writing" name="writing"/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
