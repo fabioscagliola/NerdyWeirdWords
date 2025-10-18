@@ -4,8 +4,8 @@ export default function UploadWriting() {
         const formData = new FormData(event.currentTarget);
         const data = {
             writing: formData.get("writing") as File,
-            title: formData.get("title")?.toString().trim(),
-            description: formData.get("description")?.toString().trim(),
+            title: formData.get("title") as string,
+            description: formData.get("description") as string,
         }
         validate(data);
     }
