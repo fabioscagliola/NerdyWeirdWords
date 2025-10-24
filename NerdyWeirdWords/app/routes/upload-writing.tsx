@@ -1,7 +1,7 @@
 import { postWriting } from "../postWriting";
 import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Alert from 'react-bootstrap/Alert';
+
 
 export default function UploadWriting() {
     function handleClick(event: React.FormEvent<HTMLFormElement>) {
