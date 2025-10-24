@@ -1,4 +1,4 @@
-export async function uploadBook(
+export async function postWriting(
   title: string,
   description: string,
   writing: File

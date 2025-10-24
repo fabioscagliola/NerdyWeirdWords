@@ -1,6 +1,12 @@
+import { postWriting } from "../postWriting";
+import { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Alert from 'react-bootstrap/Alert';
+
 export default function UploadWriting() {
     function handleClick(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+       
         const formData = new FormData(event.currentTarget);
         const data = {
             writing: formData.get("writing") as File,
@@ -11,6 +17,7 @@ export default function UploadWriting() {
     }
 
     function validate(data: { writing?: File; title?: string; description?: string }): void {
+         
         const allowedExtensions = ["md"];
 
         if (!data.writing || data.writing?.size === 0) {
@@ -20,12 +27,15 @@ export default function UploadWriting() {
         const extension = data.writing.name.substring(data.writing.name.lastIndexOf(".") + 1).toLowerCase();
         if (!extension || !allowedExtensions.includes(extension)) {
             throw new Error(`Invalid file type! Supported file types: ${allowedExtensions.join(", ")}`);
+        
         }
 
         if (!data.title || !data.title.trim()) {
             throw new Error("You must indicate a title!");
         }
     }
+
+   
 
     return (
         <main className="container">
@@ -47,8 +57,13 @@ export default function UploadWriting() {
                     <textarea className="form-control" id="description" name="description"/>
                 </div>
                 <button type="submit" className="btn btn-primary">Upload</button>
+
+                   {errorMessage && (
+          <Alert variant={alertVariant} dismissible onClose={() => setErrorMessage(null)}>
+            {errorMessage}
+          </Alert>
+        )}
             </form>
         </main>
     );
 }
-
