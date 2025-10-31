@@ -1,29 +1,50 @@
-export async function postWriting(
-  title: string,
-  description: string,
-  writing: File
-): Promise<any> {
-  const formData = new FormData();
-  formData.append("title", title);
-  formData.append("description", description);
-  formData.append("file", writing);
 
-  const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/Book`, {
-    method: "POST",
-    body: formData,
-  });
+export interface WritingData {
+  writing?: File;
+  title?: string;
+  description?: string;
+}
 
-  if (response.status === 400) {
-    throw new Error("400: Bad request");
+const allowedExtensions = ["md"];
+
+export async function postWriting(data: WritingData): Promise<string | null> {
+  // --- VALIDATION ---
+  if (!data.writing || data.writing.size === 0) {
+    return "400 : You must indicate a file!";
   }
 
-  if (response.status === 500) {
-    throw new Error("500: Server error");
+  const extension = data.writing.name
+    .substring(data.writing.name.lastIndexOf(".") + 1)
+    .toLowerCase();
+
+  if (!allowedExtensions.includes(extension)) {
+    return ` 400 : Invalid file type! Supported file types: ${allowedExtensions.join(", ")}`;
   }
 
-  if (!response.ok) {
-    throw new Error(`${response.status}: Unexpected error`);
+  if (!data.title || !data.title.trim()) {
+    return "400 : You must indicate a title!";
   }
 
-  return response.json();
+  // --- UPLOAD ---
+  try {
+    const formData = new FormData();
+    formData.append("writing", data.writing);
+    formData.append("title", data.title);
+    if (data.description) formData.append("description", data.description);
+
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      return ` 500 : Upload failed: ${errorText}`;
+    }
+
+    return null; // Success
+  } catch (err: any) {
+    console.error("Upload error:", err);
+    return "An unexpected error occurred during upload.";
+  }
 }
