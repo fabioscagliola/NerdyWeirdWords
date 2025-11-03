@@ -1,5 +1,4 @@
 import { postWriting } from "../postWriting";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from "react";
 
 export default function UploadWriting() {
@@ -29,19 +28,19 @@ export default function UploadWriting() {
       setErrorMessage(error);
     } else {
       setSuccessMessage("200 : Writing uploaded successfully!");
-      event.currentTarget.reset();
+      event.currentTarget?.reset(); // ✅ protezione contro null
     }
   }
 
-  // fade-out 
+  // Gestione fade-out per i messaggi di stato
   useEffect(() => {
     if (errorMessage || successMessage) {
-      const fadeTimer = setTimeout(() => setFade(true), 2500); // inizia fade
+      const fadeTimer = setTimeout(() => setFade(true), 2500); // avvia fade dopo 2.5s
       const clearTimer = setTimeout(() => {
         setErrorMessage(null);
         setSuccessMessage(null);
         setFade(false);
-      }, 4000); // faded
+      }, 4000); // rimuove dopo 4s
 
       return () => {
         clearTimeout(fadeTimer);
@@ -64,17 +63,23 @@ export default function UploadWriting() {
         onSubmit={handleClick}
       >
         <div className="mb-3">
-          <label htmlFor="writing" className="form-label">Writing</label>
+          <label htmlFor="writing" className="form-label">
+            Writing
+          </label>
           <input type="file" className="form-control" id="writing" name="writing" />
         </div>
 
         <div className="mb-3">
-          <label htmlFor="title" className="form-label">Title</label>
+          <label htmlFor="title" className="form-label">
+            Title
+          </label>
           <input type="text" className="form-control" id="title" name="title" />
         </div>
 
         <div className="mb-3">
-          <label htmlFor="description" className="form-label">Description</label>
+          <label htmlFor="description" className="form-label">
+            Description
+          </label>
           <textarea className="form-control" id="description" name="description" />
         </div>
 

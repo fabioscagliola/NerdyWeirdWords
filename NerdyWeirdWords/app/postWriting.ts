@@ -1,4 +1,6 @@
+import { getEnv } from "./utils/env"
 
+const backendUrl = getEnv("VITE_BACKENDURL");
 export interface WritingData {
   writing?: File;
   title?: string;
@@ -18,7 +20,7 @@ export async function postWriting(data: WritingData): Promise<string | null> {
     .toLowerCase();
 
   if (!allowedExtensions.includes(extension)) {
-    return ` 400 : Invalid file type! Supported file types: ${allowedExtensions.join(", ")}`;
+    return `400 : Invalid file type! Supported file types: ${allowedExtensions.join(", ")}`;
   }
 
   if (!data.title || !data.title.trim()) {
@@ -32,10 +34,10 @@ export async function postWriting(data: WritingData): Promise<string | null> {
     formData.append("title", data.title);
     if (data.description) formData.append("description", data.description);
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
-      method: "POST",
-      body: formData,
-    });
+   const res = await fetch(`${backendUrl}/Writing`, {
+  method: "POST",
+  body: JSON.stringify(data),
+});
 
     if (!res.ok) {
       const errorText = await res.text();
