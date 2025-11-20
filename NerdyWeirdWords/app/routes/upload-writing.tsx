@@ -7,42 +7,41 @@ interface WritingData {
 }
 
 const allowedExtensions = ["md"];
-async function postWriting(data: WritingData): Promise<string | null> {
-  if (!data.writing || data.writing.size === 0) {
-    return "You must indicate a file!";
-  }
+
+function validateWriting(data: WritingData): string | null {
+  if (!data.writing || data.writing.size === 0) return "You must indicate a file!";
 
   const extension = data.writing.name
     .substring(data.writing.name.lastIndexOf(".") + 1)
     .toLowerCase();
 
-  if (!allowedExtensions.includes(extension)) {
+  if (!allowedExtensions.includes(extension))
     return `Invalid file type! Supported file types: ${allowedExtensions.join(", ")}`;
-  }
 
-  if (!data.title || !data.title.trim()) {
-    return "You must indicate a title!";
-  }
+  if (!data.title || !data.title.trim()) return "You must indicate a title!";
 
+  return null;
+}
+
+async function uploadWriting(data: WritingData): Promise<string | null> {
   try {
     const formData = new FormData();
-    formData.append("writing", data.writing);
-    formData.append("title", data.title);
+    formData.append("writing", data.writing!);
+    formData.append("title", data.title!);
     if (data.description) formData.append("description", data.description);
 
-    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/?/?`, { // wich endpoint?
+    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/Writing?`, {
       method: "POST",
-      body: formData, 
+      body: formData,
     });
 
     if (!res.ok) {
       const errorText = await res.text();
-      return ` Upload failed: ${errorText}`;
+      return `Upload failed: ${errorText}`;
     }
 
     return null;
-  } catch (err: any) {
-    console.error("Upload error:", err);
+  } catch {
     return "An unexpected error occurred during upload.";
   }
 }
@@ -59,30 +58,38 @@ export default function UploadWriting() {
     setLoading(true);
 
     const formData = new FormData(event.currentTarget);
-    const data = {
+    const data: WritingData = {
       writing: formData.get("writing") as File,
       title: formData.get("title") as string,
       description: formData.get("description") as string,
     };
 
-    const error = await postWriting(data);
+    const validationError = validateWriting(data);
+    if (validationError) {
+      setErrorMessage(validationError);
+      setLoading(false);
+      return;
+    }
+
+    const uploadError = await uploadWriting(data);
     setLoading(false);
 
-    if (error) {
-      setErrorMessage(error);
+    if (uploadError) {
+      setErrorMessage(uploadError);
     } else {
       setSuccessMessage("Writing uploaded successfully!");
-      event.currentTarget?.reset();// cosa fa ??
+      event.currentTarget.reset();
     }
   }
 
   return (
     <main className="container">
-         <nav className="navbar navbar">
-                <div className="navbar-brand">
-                    <img alt="" src="/logo.svg" width="32" height="32"/>
-                </div>
-         </nav>
+      <nav className="navbar navbar">
+        <div className="navbar-brand">
+          <img alt="" src="/logo.svg" width="32" height="32" />
+        </div>
+      </nav>
+
       <div className="my-5 text-center">
         <h1>Upload writing</h1>
         <p>Pick a file, give it a title, optionally a description, and upload your writing.</p>
@@ -115,15 +122,13 @@ export default function UploadWriting() {
           <textarea className="form-control" id="description" name="description" />
         </div>
 
-        <button type="submit" className="btn btn-primary d-flex" disabled={loading}>Upload Writing</button>
+        <button type="submit" className="btn btn-primary d-flex" disabled={loading}>
+          Upload Writing
+        </button>
 
-        {errorMessage && (
-         <div className="alert alert-danger">{errorMessage}</div>
-        )}
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
-        {successMessage && (
-          <div className="alert alert-success">{successMessage}</div>
-        )}
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
       </form>
     </main>
   );
