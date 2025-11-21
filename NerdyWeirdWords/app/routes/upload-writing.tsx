@@ -23,13 +23,8 @@ function validateWriting(data: WritingData): string | null {
   return null;
 }
 
-async function uploadWriting(data: WritingData): Promise<string | null> {
-  try {
-    const formData = new FormData();
-    formData.append("writing", data.writing!);
-    formData.append("title", data.title!);
-    if (data.description) formData.append("description", data.description);
-
+async function postWriting(formData: FormData) {
+  
     const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/Writing?`, {
       method: "POST",
       body: formData,
@@ -37,13 +32,9 @@ async function uploadWriting(data: WritingData): Promise<string | null> {
 
     if (!res.ok) {
       const errorText = await res.text();
-      return `Upload failed: ${errorText}`;
+     throw new Error(errorText);
     }
 
-    return null;
-  } catch {
-    return "An unexpected error occurred during upload.";
-  }
 }
 
 export default function UploadWriting() {
@@ -70,16 +61,14 @@ export default function UploadWriting() {
       setLoading(false);
       return;
     }
+  try {
+    await postWriting(formData);
+    setSuccessMessage("Writing uploaded successfully!");
+    event.currentTarget.reset();
 
-    const uploadError = await uploadWriting(data);
-    setLoading(false);
-
-    if (uploadError) {
-      setErrorMessage(uploadError);
-    } else {
-      setSuccessMessage("Writing uploaded successfully!");
-      event.currentTarget.reset();
-    }
+  } catch (e) {
+    setErrorMessage(e instanceof Error ? e.message : "Unexpected error");
+  }
   }
 
   return (
@@ -95,12 +84,7 @@ export default function UploadWriting() {
         <p>Pick a file, give it a title, optionally a description, and upload your writing.</p>
       </div>
 
-      <form
-        className="col-10 col-lg-5 mx-auto my-5"
-        encType="multipart/form-data"
-        noValidate
-        onSubmit={handleClick}
-      >
+      <form className="col-10 col-lg-5 mx-auto my-5" encType="multipart/form-data" noValidate onSubmit={handleClick}>
         <div className="mb-3">
           <label htmlFor="writing" className="form-label">
             Writing
