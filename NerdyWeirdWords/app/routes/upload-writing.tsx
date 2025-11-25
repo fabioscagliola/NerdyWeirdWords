@@ -1,20 +1,16 @@
 import { useState} from "react";
 
 export default function UploadWriting() {
-    const [successMessage, setsuccessMessage] = useState(false);
-    const [errorMessage, seterrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [hangOn, setHangOn] = useState(false);
-
-    function getErrorMessage(err: unknown): string {
-        return err instanceof Error ? err.message : "Unknown error occurred";
-    }
 
     async function handleClick(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         setHangOn(true);
-        seterrorMessage(null);
-        setsuccessMessage(false);
+        setErrorMessage(null);
+        setSuccessMessage(false);
 
         try {
             const formData = new FormData(event.currentTarget);
@@ -28,10 +24,14 @@ export default function UploadWriting() {
 
             await upload(data); 
 
-            setsuccessMessage(true);
+            setSuccessMessage(true);
 
         } catch (err: unknown) {
-            seterrorMessage(getErrorMessage(err));
+              if (err instanceof Error) {
+                setErrorMessage(err.message);
+            } else {
+                setErrorMessage("Something's wrong!");
+            }
         } finally {
             setHangOn(false);
         }
