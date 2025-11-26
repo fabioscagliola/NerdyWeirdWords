@@ -22,7 +22,7 @@ export default function UploadWriting() {
 
             validate(data);
 
-            await upload(data); 
+            await upload(formData); 
 
             setSuccessMessage(true);
 
@@ -54,12 +54,8 @@ export default function UploadWriting() {
         }
     }
 
-    async function upload(data: { writing: File; title: string; description: string }): Promise<void> {
-        const formData = new FormData();
-        formData.append("writing", data.writing);
-        formData.append("title", data.title);
-        formData.append("description", data.description);
-
+    async function upload(formData: FormData): Promise<void> {
+    
         const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/Writing/Upload`, {
             method: "POST",
             body: formData,
