@@ -1,7 +1,7 @@
-import { useState} from "react";
+import {useState} from "react";
 
 export default function UploadWriting() {
-    const [successMessage, setSuccessMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [hangOn, setHangOn] = useState(false);
 
@@ -10,7 +10,7 @@ export default function UploadWriting() {
 
         setHangOn(true);
         setErrorMessage(null);
-        setSuccessMessage(false);
+        setSuccessMessage(null);
 
         try {
             const formData = new FormData(event.currentTarget);
@@ -22,13 +22,13 @@ export default function UploadWriting() {
 
             validate(data);
 
-            await upload(formData); 
+            await upload(formData);
 
-            setSuccessMessage(true);
+            setSuccessMessage("Writing uploaded!");
 
-        } catch (err: unknown) {
-              if (err instanceof Error) {
-                setErrorMessage(err.message);
+        } catch (e: unknown) {
+              if (e instanceof Error) {
+                setErrorMessage(e.message);
             } else {
                 setErrorMessage("Something's wrong!");
             }
@@ -62,8 +62,8 @@ export default function UploadWriting() {
         });
 
         if (!response.ok) {
-            const text = await response.text();
-            throw new Error(text || "Something's wrong!");
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
         }
     }
 
@@ -82,7 +82,7 @@ export default function UploadWriting() {
             <div className="my-5 text-center">
                 <nav className="navbar navbar">
                     <div className="navbar-brand">
-                        <img alt="" src="/logo.svg" width="32" height="32" />
+                        <img alt="" src="/logo.svg" width="32" height="32"/>
                     </div>
                 </nav>
                 <h1>Upload writing</h1>
@@ -101,14 +101,16 @@ export default function UploadWriting() {
                     <label htmlFor="description" className="form-label">Description</label>
                     <textarea className="form-control" id="description" name="description"/>
                 </div>
-                <button type="submit" className="btn btn-primary d-flex">Upload</button>
+                <div className="mb-3">
+                   <button type="submit" className="btn btn-primary d-flex">Upload</button>
+                </div>
 
                 {errorMessage && (
                     <div className="alert alert-danger mt-3">{errorMessage}</div>
                 )}
 
                 {successMessage && (
-                    <div className="alert alert-success mt-3">Uploaded!</div>
+                    <div className="alert alert-success mt-3">{successMessage}</div>
                 )}
             </form>
         </main>
