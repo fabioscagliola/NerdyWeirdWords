@@ -10,7 +10,7 @@ The name, the slogan, and their stylization are inspired by regular expressions,
 
 The logo represents two brain halves—the right one flipped upside down—both resembling clouds, because this space thrives on imagination and lives in the cloud.
 
-I created this because I’m about to finish my first novella, and I want to share it with beta readers in a meaningful, interactive way. And no existing platform felt quite right.
+I created this because I’ve recently published my first novel, and I want to share it with beta readers in a meaningful, interactive way. And no existing platform felt quite right.
 
 ## Roadmap
 
