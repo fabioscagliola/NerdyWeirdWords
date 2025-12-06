@@ -1,13 +1,38 @@
+import {useState} from "react";
+
 export default function UploadWriting() {
-    function handleClick(event: React.FormEvent<HTMLFormElement>) {
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [hangOn, setHangOn] = useState(false);
+
+    async function handleClick(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const data = {
-            writing: formData.get("writing") as File,
-            title: formData.get("title") as string,
-            description: formData.get("description") as string,
+
+        setHangOn(true);
+        setErrorMessage(null);
+        setSuccessMessage(null);
+
+        try {
+            const formData = new FormData(event.currentTarget);
+            const data = {
+                writing: formData.get("writing") as File,
+                title: formData.get("title") as string,
+                description: formData.get("description") as string,
+            };
+
+            validate(data);
+
+            await upload(formData);
+
+            setSuccessMessage("Writing uploaded!");
+
+        } catch (e: unknown) {
+              if (e instanceof Error) {
+                setErrorMessage(e.message || "Something's wrong!");
+            }
+        } finally {
+            setHangOn(false);
         }
-        validate(data);
     }
 
     function validate(data: { writing?: File; title?: string; description?: string }): void {
@@ -27,9 +52,37 @@ export default function UploadWriting() {
         }
     }
 
+    async function upload(formData: FormData): Promise<void> {
+    
+        const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/Writing/Upload`, {
+            method: "POST",
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+        }
+    }
+
+    if (hangOn) {
+        return (
+            <div className="my-5 text-center">
+                <div className="spinner-border">
+                    <span className="visually-hidden">Hang on...</span>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <main className="container">
             <div className="my-5 text-center">
+                <nav className="navbar navbar">
+                    <div className="navbar-brand">
+                        <img alt="" src="/logo.svg" width="32" height="32"/>
+                    </div>
+                </nav>
                 <h1>Upload writing</h1>
                 <p>Pick a file, give it a title, optionally a description, and upload your writing.</p>
             </div>
@@ -46,9 +99,18 @@ export default function UploadWriting() {
                     <label htmlFor="description" className="form-label">Description</label>
                     <textarea className="form-control" id="description" name="description"/>
                 </div>
-                <button type="submit" className="btn btn-primary">Upload</button>
+                <div className="mb-3">
+                   <button type="submit" className="btn btn-primary d-flex">Upload</button>
+                </div>
+
+                {errorMessage && (
+                    <div className="alert alert-danger mt-3">{errorMessage}</div>
+                )}
+
+                {successMessage && (
+                    <div className="alert alert-success mt-3">{successMessage}</div>
+                )}
             </form>
         </main>
     );
 }
-
