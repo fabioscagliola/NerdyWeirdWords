@@ -28,9 +28,7 @@ export default function UploadWriting() {
 
         } catch (e: unknown) {
               if (e instanceof Error) {
-                setErrorMessage(e.message);
-            } else {
-                setErrorMessage("Something's wrong!");
+                setErrorMessage(e.message || "Something's wrong!");
             }
         } finally {
             setHangOn(false);
