@@ -4,8 +4,7 @@ import {isAuthorized} from "~/util";
 
 export default function SignIn() {
     const [errorMessage, setErrorMessage] = useState<null | string>(null);
-    const [hangOn, setHangOn] = useState<boolean>(true);
-    const [linkSent, setLinkSent] = useState<boolean>(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const navigate = useNavigate();
     const params = useParams();
 
@@ -41,14 +40,13 @@ export default function SignIn() {
             } else {
                 console.log("JWT not found in URL.");
             }
-            setHangOn(false);
         })();
     }, [navigate, params.jsonWebToken]);
 
     async function submit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setErrorMessage(null);
-        setLinkSent(false);
+        setSuccessMessage(null);
         try {
             const formData = new FormData(event.currentTarget);
             const email = formData.get("email")?.toString().trim();
@@ -64,24 +62,14 @@ export default function SignIn() {
                 const errorMessage = await response.text();
                 throw new Error(errorMessage);
             }
-            setLinkSent(true);
+            setSuccessMessage("Link sent!");
         } catch (e: unknown) {
-            if (e instanceof Error) {
+            if (e instanceof Error && e.message) {
                 setErrorMessage(e.message);
             } else {
                 setErrorMessage("Something's wrong!");
             }
         }
-    }
-
-    if (hangOn) {
-        return (
-            <div className="my-5 text-center">
-                <div className="spinner-border">
-                    <span className="visually-hidden">Hang on..</span>
-                </div>
-            </div>
-        );
     }
 
     return (
@@ -101,13 +89,14 @@ export default function SignIn() {
                     <input type="email" className="form-control" id="email" name="email"/>
                 </div>
                 <div className="mb-3">
-                    <button type="submit" className="btn btn-primary d-flex" disabled={linkSent}>Go</button>
+                    <button type="submit" className="btn btn-primary d-flex">Go</button>
                 </div>
-                {errorMessage ? (
-                    <div className="alert alert-danger">{errorMessage}</div>
-                ) : linkSent ? (
-                    <div className="alert alert-success">Link sent!</div>
-                ) : null}
+                {errorMessage && (
+                    <div className="alert alert-danger mt-3">{errorMessage}</div>
+                )}
+                {successMessage && (
+                    <div className="alert alert-success mt-3">{successMessage}</div>
+                )}
             </form>
         </main>
     );
