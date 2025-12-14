@@ -1,14 +1,12 @@
 import {useState} from "react";
 
 export default function UploadWriting() {
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [hangOn, setHangOn] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    async function handleClick(event: React.FormEvent<HTMLFormElement>) {
+    async function submit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        setHangOn(true);
         setErrorMessage(null);
         setSuccessMessage(null);
 
@@ -27,11 +25,11 @@ export default function UploadWriting() {
             setSuccessMessage("Writing uploaded!");
 
         } catch (e: unknown) {
-              if (e instanceof Error) {
-                setErrorMessage(e.message || "Something's wrong!");
+            if (e instanceof Error && e.message) {
+                setErrorMessage(e.message);
+            } else {
+                setErrorMessage("Something's wrong!");
             }
-        } finally {
-            setHangOn(false);
         }
     }
 
@@ -39,40 +37,28 @@ export default function UploadWriting() {
         const allowedExtensions = ["md"];
 
         if (!data.writing || data.writing?.size === 0) {
-            throw new Error("You must indicate a file!");
+            throw new Error("Where's the writing?");
         }
 
         const extension = data.writing.name.substring(data.writing.name.lastIndexOf(".") + 1).toLowerCase();
         if (!extension || !allowedExtensions.includes(extension)) {
-            throw new Error(`Invalid file type! Supported file types: ${allowedExtensions.join(", ")}`);
+            throw new Error(`We only accept these file types: ${allowedExtensions.join(", ")}`);
         }
 
         if (!data.title || !data.title.trim()) {
-            throw new Error("You must indicate a title!");
+            throw new Error("Where's the title?");
         }
     }
 
     async function upload(formData: FormData): Promise<void> {
-    
         const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/Writing/Upload`, {
             method: "POST",
             body: formData,
         });
-
         if (!response.ok) {
             const errorMessage = await response.text();
             throw new Error(errorMessage);
         }
-    }
-
-    if (hangOn) {
-        return (
-            <div className="my-5 text-center">
-                <div className="spinner-border">
-                    <span className="visually-hidden">Hang on...</span>
-                </div>
-            </div>
-        );
     }
 
     return (
@@ -84,9 +70,9 @@ export default function UploadWriting() {
                     </div>
                 </nav>
                 <h1>Upload writing</h1>
-                <p>Pick a file, give it a title, optionally a description, and upload your writing.</p>
+                <p>Pick your writing, give it a title, optionally a description, and we'll take care of the rest.</p>
             </div>
-            <form className="col-10 col-lg-5 mx-auto my-5" encType="multipart/form-data" noValidate onSubmit={handleClick}>
+            <form className="col-10 col-lg-5 mx-auto my-5" encType="multipart/form-data" noValidate onSubmit={submit}>
                 <div className="mb-3">
                     <label htmlFor="writing" className="form-label">Writing</label>
                     <input type="file" className="form-control" id="writing" name="writing"/>
@@ -100,7 +86,7 @@ export default function UploadWriting() {
                     <textarea className="form-control" id="description" name="description"/>
                 </div>
                 <div className="mb-3">
-                   <button type="submit" className="btn btn-primary d-flex">Upload</button>
+                    <button type="submit" className="btn btn-primary d-flex">Upload writing</button>
                 </div>
 
                 {errorMessage && (
