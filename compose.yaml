@@ -32,6 +32,8 @@ services:
     build:
       context: ./NerdyWeirdWords
     container_name: nerdy-weird-frontend
+    environment:
+      VITE_BACKENDURL: https://api.nerdyweirdwords.com
     networks:
       - nerdyweirdwords
     ports:

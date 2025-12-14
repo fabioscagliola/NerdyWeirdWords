@@ -42,6 +42,8 @@ services:
       watch:
         - action: rebuild
           path: ./NerdyWeirdWords
+    environment:
+      VITE_BACKENDURL: http://localhost:65535
     networks:
       - nerdyweirdwords
     ports:
