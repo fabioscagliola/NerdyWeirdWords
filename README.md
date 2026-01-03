@@ -12,6 +12,8 @@ The logo represents two brain halves—the right one flipped upside down—both 
 
 I created this because I’ve recently published my first novel, and I want to share it with beta readers in a meaningful, interactive way. And no existing platform felt quite right.
 
+Nerdy Weird Words was featured in the JetBrains blog article [5 Stories Of Developers Using JetBrains Rider to Create, Collaborate, and Have Fun](https://blog.jetbrains.com/dotnet/2025/12/03/5-stories-of-developers-using-jetbrains-rider/).
+
 ## Roadmap
 
 Currently working on version 1.2 – people upload writings
