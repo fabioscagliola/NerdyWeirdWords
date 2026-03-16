@@ -1,5 +1,6 @@
 namespace com.nerdyweirdwords.backend.WritingDomain;
+
 public class Block
 {
- public Attribute[] Attributes { get; set; } 
+    public List<Attribute> Attributes { get; set; }
 }
