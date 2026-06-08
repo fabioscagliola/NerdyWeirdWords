@@ -13,6 +13,7 @@
     <SourceRoot Include="C:\Users\Mirco\.nuget\packages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore\9.0.2\buildTransitive\net8.0\Microsoft.EntityFrameworkCore.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore\9.0.2\buildTransitive\net8.0\Microsoft.EntityFrameworkCore.props')" />
     <Import Project="$(NuGetPackageRoot)nunit3testadapter\4.6.0\build\netcoreapp3.1\NUnit3TestAdapter.props" Condition="Exists('$(NuGetPackageRoot)nunit3testadapter\4.6.0\build\netcoreapp3.1\NUnit3TestAdapter.props')" />
     <Import Project="$(NuGetPackageRoot)nunit\4.2.2\build\NUnit.props" Condition="Exists('$(NuGetPackageRoot)nunit\4.2.2\build\NUnit.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.testplatform.testhost\17.12.0\build\netcoreapp3.1\Microsoft.TestPlatform.TestHost.props" Condition="Exists('$(NuGetPackageRoot)microsoft.testplatform.testhost\17.12.0\build\netcoreapp3.1\Microsoft.TestPlatform.TestHost.props')" />
@@ -20,6 +21,7 @@
     <Import Project="$(NuGetPackageRoot)microsoft.net.test.sdk\17.12.0\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.test.sdk\17.12.0\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgSentry Condition=" '$(PkgSentry)' == '' ">C:\Users\Mirco\.nuget\packages\sentry\5.8.0</PkgSentry>
     <PkgNUnit_Analyzers Condition=" '$(PkgNUnit_Analyzers)' == '' ">C:\Users\Mirco\.nuget\packages\nunit.analyzers\4.4.0</PkgNUnit_Analyzers>
   </PropertyGroup>
 </Project>
