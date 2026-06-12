@@ -20,7 +20,7 @@ public class MarkdownParserTests
     {
         var result = MarkdownParser.Parse(Document);
 
-        Assert.That(result.Blocks, Has.Length.EqualTo(3));
+    Assert.That(result.Blocks, Has.Count.EqualTo(3));
     }
 
     [Test]
