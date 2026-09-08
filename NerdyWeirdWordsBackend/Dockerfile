@@ -5,7 +5,7 @@ WORKDIR /src
 COPY NerdyWeirdWordsBackend.csproj .
 RUN dotnet restore "NerdyWeirdWordsBackend.csproj"
 COPY . .
-CMD dotnet run
+CMD ["dotnet", "run"]
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
