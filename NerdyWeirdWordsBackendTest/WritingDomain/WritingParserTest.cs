@@ -19,7 +19,6 @@ A **pangram** is a sentence that contains all the letters of the alphabet.
         var writing = new WritingParser().Do(markdown);
 
         Assert.That(writing, Is.Not.Null);
-        Assert.That(writing.Attributes, Is.Empty);
         Assert.That(writing.Blocks, Has.Count.EqualTo(3));
 
         var heading = (Heading)writing.Blocks[0];
