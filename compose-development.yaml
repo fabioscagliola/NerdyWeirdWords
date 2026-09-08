@@ -31,7 +31,7 @@ services:
     networks:
       - nerdyweirdwords
     ports:
-      - "65535:65535"
+      - "65533:65535"
 
   frontend:
     build:
@@ -43,7 +43,7 @@ services:
         - action: rebuild
           path: ./NerdyWeirdWords
     environment:
-      VITE_BACKENDURL: http://localhost:65535
+      VITE_BACKENDURL: http://localhost:65533
     networks:
       - nerdyweirdwords
     ports:

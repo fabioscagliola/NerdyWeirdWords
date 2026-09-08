@@ -67,7 +67,7 @@ make watch
 Once the containers are running, verify the backend is responding. This command will also initialize the database.
 
 ```
-curl http://localhost:65535/status
+curl http://localhost:65533/status
 ```
 
 Insert the first user into the database. Replace my email and name with your own.
