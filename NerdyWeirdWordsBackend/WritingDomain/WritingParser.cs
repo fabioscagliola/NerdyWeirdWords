@@ -10,11 +10,7 @@ public class WritingParser
     public Writing Do(string markdown)
     {
         var document = Markdown.Parse(markdown);
-        var writing = new Writing
-        {
-            Attributes = [],
-            Blocks = [],
-        };
+        var writing = new Writing();
 
         foreach (var markdownBlock in document)
         {
@@ -23,7 +19,6 @@ public class WritingParser
                 case HeadingBlock headingBlock:
                     writing.Blocks.Add(new Heading
                     {
-                        Attributes = [],
                         Level = headingBlock.Level,
                         Text = Flatten(headingBlock.Inline).Text,
                     });

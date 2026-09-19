@@ -1,7 +1,13 @@
+using com.nerdyweirdwords.backend.PersonDomain;
+
 namespace com.nerdyweirdwords.backend.WritingDomain;
 
 public class Writing
 {
-  public List<Attribute> Attributes { get; set; }
-  public List<Block> Blocks { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public string Title { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public Guid OwnerId { get; set; }
+    public Person Owner { get; set; } = null!;
+    public List<Block> Blocks { get; set; } = [];
 }

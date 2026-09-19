@@ -1,6 +1,8 @@
-using System.Security.Cryptography;
+using com.nerdyweirdwords.backend.WritingDomain.UploadWriting;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace com.nerdyweirdwords.backend;
 
@@ -15,6 +17,7 @@ public class Program
         var config = configurationSection.Get<NerdyWeirdConfig>()!;
 
         webApplicationBuilder.Services.AddControllers();
+        webApplicationBuilder.Services.AddValidatorsFromAssemblyContaining<UploadWritingIncomingValidator>();
         webApplicationBuilder.Services.AddOpenApi();
 
         var rsa = RSA.Create();
@@ -60,6 +63,7 @@ public class Program
         });
 
         webApplication.UseHttpsRedirection();
+        webApplication.UseAuthentication();
         webApplication.UseAuthorization();
         webApplication.MapControllers();
 
