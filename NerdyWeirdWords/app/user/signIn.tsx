@@ -1,6 +1,6 @@
-import {useEffect, useState,} from "react";
-import {useNavigate, useParams,} from "react-router";
-import {isAuthorized} from "~/util";
+import { useEffect, useState, } from "react";
+import { useNavigate, useParams, } from "react-router";
+import { isAuthorized } from "~/util";
 
 export default function SignIn() {
     const [errorMessage, setErrorMessage] = useState<null | string>(null);
@@ -31,7 +31,7 @@ export default function SignIn() {
                 console.log("JWT found in URL.");
                 if (await isAuthorized(params.jsonWebToken)) {
                     console.log("Valid JWT found in URL.");
-                    document.cookie = `${cookieName}=${params.jsonWebToken}`;
+                    document.cookie = `${cookieName}=${params.jsonWebToken}; path=/;`;
                     navigate(target);
                     return;
                 } else {
@@ -55,8 +55,8 @@ export default function SignIn() {
             }
             const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/Person/SendSignInLink`, {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({email})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
             });
             if (!response.ok) {
                 const errorMessage = await response.text();
@@ -76,7 +76,7 @@ export default function SignIn() {
         <main className="container">
             <nav className="navbar navbar">
                 <div className="navbar-brand">
-                    <img alt="" src="/logo.svg" width="32" height="32"/>
+                    <img alt="" src="/logo.svg" width="32" height="32" />
                 </div>
             </nav>
             <div className="my-5 text-center">
@@ -86,7 +86,7 @@ export default function SignIn() {
             <form className="col-10 col-lg-5 mx-auto my-5" noValidate onSubmit={submit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" name="email"/>
+                    <input type="email" className="form-control" id="email" name="email" />
                 </div>
                 <div className="mb-3">
                     <button type="submit" className="btn btn-primary d-flex">Go</button>

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 export default function UploadWriting() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -51,8 +51,18 @@ export default function UploadWriting() {
     }
 
     async function upload(formData: FormData): Promise<void> {
+        const jsonWebToken = document.cookie
+            .split("; ")
+            .find(item => item.startsWith("jsonWebToken="))
+            ?.split("=")[1];
+
+        if (!jsonWebToken) {
+            throw new Error("Where's your JWT?");
+        }
+
         const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/Writing/Upload`, {
             method: "POST",
+            headers: { "Authorization": `Bearer ${jsonWebToken}` },
             body: formData,
         });
         if (!response.ok) {
@@ -66,7 +76,7 @@ export default function UploadWriting() {
             <div className="my-5 text-center">
                 <nav className="navbar navbar">
                     <div className="navbar-brand">
-                        <img alt="" src="/logo.svg" width="32" height="32"/>
+                        <img alt="" src="/logo.svg" width="32" height="32" />
                     </div>
                 </nav>
                 <h1>Upload writing</h1>
@@ -75,15 +85,15 @@ export default function UploadWriting() {
             <form className="col-10 col-lg-5 mx-auto my-5" encType="multipart/form-data" noValidate onSubmit={submit}>
                 <div className="mb-3">
                     <label htmlFor="writing" className="form-label">Writing</label>
-                    <input type="file" className="form-control" id="writing" name="writing"/>
+                    <input type="file" className="form-control" id="writing" name="writing" />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
-                    <input type="text" className="form-control" id="title" name="title"/>
+                    <input type="text" className="form-control" id="title" name="title" />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Description</label>
-                    <textarea className="form-control" id="description" name="description"/>
+                    <textarea className="form-control" id="description" name="description" />
                 </div>
                 <div className="mb-3">
                     <button type="submit" className="btn btn-primary d-flex">Upload writing</button>
