@@ -73,12 +73,12 @@ export default function UploadWriting() {
 
     return (
         <main className="container">
+            <nav className="navbar navbar">
+                <div className="navbar-brand">
+                    <img alt="" src="/logo.svg" width="32" height="32" />
+                </div>
+            </nav>
             <div className="my-5 text-center">
-                <nav className="navbar navbar">
-                    <div className="navbar-brand">
-                        <img alt="" src="/logo.svg" width="32" height="32" />
-                    </div>
-                </nav>
                 <h1>Upload writing</h1>
                 <p>Pick your writing, give it a title, optionally a description, and we'll take care of the rest.</p>
             </div>
