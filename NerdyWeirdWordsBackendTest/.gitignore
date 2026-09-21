@@ -15,7 +15,6 @@ nupkg/
 *.suo
 *.user
 *.userosscache
-*.userosscache
 *.sln.docstates
 
 # Build results
