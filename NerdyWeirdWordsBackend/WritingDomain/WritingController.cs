@@ -1,4 +1,5 @@
 using com.nerdyweirdwords.backend.WritingDomain.UploadWriting;
+using com.nerdyweirdwords.backend.WritingDomain.ListWriting;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +49,7 @@ public class WritingController(NerdyWeirdDatabase database, IValidator<UploadWri
 
         writing.Title = incoming.Title!.Trim();
         writing.Description = string.IsNullOrEmpty(incoming.Description) ? null : incoming.Description;
+        writing.DateUploaded = DateTime.UtcNow;
         writing.OwnerId = owner.Id;
         writing.Owner = owner;
 
@@ -69,5 +71,29 @@ public class WritingController(NerdyWeirdDatabase database, IValidator<UploadWri
         await database.SaveChangesAsync();
 
         return Ok();
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> List()
+    {
+        if (!Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub"), out var ownerId))
+        {
+            return Unauthorized();
+        }
+
+        var writings = await database.Writings
+            .Where(writing => writing.OwnerId == ownerId)
+            .OrderByDescending(writing => writing.DateUploaded)
+            .Select(writing => new ListWritingItemOutgoing
+            {
+                Id = writing.Id,
+                Title = writing.Title,
+                Description = writing.Description,
+                DateUploaded = writing.DateUploaded,
+            })
+            .ToListAsync();
+
+        return Ok(writings);
     }
 }
